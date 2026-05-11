@@ -165,6 +165,40 @@ def wobble_ring(
     )
 
 
+def curved_line(
+    draw: ImageDraw.ImageDraw,
+    p0: Point,
+    p1: Point,
+    rng: random.Random,
+    *,
+    curvature: float = 0.15,
+    color: Color = (15, 15, 15),
+    width: float = 2.0,
+    wobble: float = 0.3,
+) -> None:
+    """Draw a smooth curve from p0 to p1 that bows perpendicular to the chord.
+    `curvature` is the sagitta as a fraction of the chord length; positive bows
+    left of travel direction (CCW perpendicular). Hand-drawn wobble layered on top."""
+    x0, y0 = p0
+    x1, y1 = p1
+    dx, dy = x1 - x0, y1 - y0
+    length = math.hypot(dx, dy)
+    if length < 1.0:
+        _stamp(draw, x0, y0, width / 2, color)
+        return
+    px, py = -dy / length, dx / length
+    mx, my = (x0 + x1) / 2.0, (y0 + y1) / 2.0
+    bulge = length * curvature
+    ctrl_x, ctrl_y = mx + px * bulge, my + py * bulge
+
+    n = max(12, int(length / 3))
+    t = np.linspace(0.0, 1.0, n)
+    bx = (1 - t) ** 2 * x0 + 2 * (1 - t) * t * ctrl_x + t**2 * x1
+    by = (1 - t) ** 2 * y0 + 2 * (1 - t) * t * ctrl_y + t**2 * y1
+    pts = list(zip(bx.tolist(), by.tolist()))
+    wobble_polyline(draw, pts, rng, color=color, width=width, wobble=wobble)
+
+
 def wobble_polyline(
     draw: ImageDraw.ImageDraw,
     points: Sequence[Point],
