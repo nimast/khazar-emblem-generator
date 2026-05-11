@@ -1,0 +1,2 @@
+# Raspberry Pi only. Do not install on Mac/Linux dev machines.
+inky[rpi]>=1.5
