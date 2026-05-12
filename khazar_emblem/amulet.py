@@ -140,7 +140,7 @@ def draw_spokes(draw, cx, cy, r_inner, r_outer, rng):
             theta = phase + 2 * math.pi * k / n + rng.uniform(-0.015, 0.015)
             p0 = (cx + r_inner * math.cos(theta), cy + r_inner * math.sin(theta))
             p1 = (cx + r_outer * math.cos(theta), cy + r_outer * math.sin(theta))
-            wobble_line(draw, p0, p1, rng, color=BLACK, width=width, wobble=0.3)
+            wobble_line(draw, p0, p1, rng, color=BLACK, width=width, wobble=0.3, pool_at_ends=True)
             x1, y1 = p1
             draw.ellipse((x1 - endpoint_r, y1 - endpoint_r, x1 + endpoint_r, y1 + endpoint_r), fill=BLACK)
         return
@@ -151,19 +151,20 @@ def draw_spokes(draw, cx, cy, r_inner, r_outer, rng):
             theta = phase + 2 * math.pi * k / n + rng.uniform(-0.015, 0.015)
             p0 = (cx + r_inner * math.cos(theta), cy + r_inner * math.sin(theta))
             p1 = (cx + r_outer * math.cos(theta), cy + r_outer * math.sin(theta))
-            wobble_line(draw, p0, p1, rng, color=BLACK, width=width, wobble=0.3)
+            wobble_line(draw, p0, p1, rng, color=BLACK, width=width, wobble=0.3, pool_at_ends=True)
         return
 
     if style == "petal":
-        # Pairs of curved lines meeting at center, bowing outward to form petals
+        # Pairs of curved lines meeting at center, bowing outward to form petals.
+        # Pool at both ends so each petal tip terminates in a clear ink dot like
+        # a real pen lifted off paper.
         curvature = rng.uniform(0.18, 0.32)
         for k in range(n):
             theta = phase + 2 * math.pi * k / n
             p0 = (cx + r_inner * math.cos(theta), cy + r_inner * math.sin(theta))
             p1 = (cx + r_outer * math.cos(theta), cy + r_outer * math.sin(theta))
-            # Two curves, bowing opposite directions, forming a petal silhouette
-            curved_line(draw, p0, p1, rng, curvature=curvature, color=BLACK, width=width, wobble=0.25)
-            curved_line(draw, p0, p1, rng, curvature=-curvature, color=BLACK, width=width, wobble=0.25)
+            curved_line(draw, p0, p1, rng, curvature=curvature, color=BLACK, width=width, wobble=0.25, pool_at_ends=True)
+            curved_line(draw, p0, p1, rng, curvature=-curvature, color=BLACK, width=width, wobble=0.25, pool_at_ends=True)
         return
 
     if style == "crossbar":
@@ -174,12 +175,12 @@ def draw_spokes(draw, cx, cy, r_inner, r_outer, rng):
             theta = phase + 2 * math.pi * k / n + rng.uniform(-0.015, 0.015)
             p0 = (cx + r_inner * math.cos(theta), cy + r_inner * math.sin(theta))
             p1 = (cx + r_outer * math.cos(theta), cy + r_outer * math.sin(theta))
-            wobble_line(draw, p0, p1, rng, color=BLACK, width=width, wobble=0.3)
+            wobble_line(draw, p0, p1, rng, color=BLACK, width=width, wobble=0.3, pool_at_ends=True)
             # Crossbar: perpendicular line at p1
             ppx, ppy = -math.sin(theta), math.cos(theta)
             bar_a = (p1[0] - ppx * bar_len / 2, p1[1] - ppy * bar_len / 2)
             bar_b = (p1[0] + ppx * bar_len / 2, p1[1] + ppy * bar_len / 2)
-            wobble_line(draw, bar_a, bar_b, rng, color=BLACK, width=width * 0.85, wobble=0.2)
+            wobble_line(draw, bar_a, bar_b, rng, color=BLACK, width=width * 0.85, wobble=0.2, pool_at_ends=True)
             draw.ellipse((p1[0] - endpoint_r, p1[1] - endpoint_r, p1[0] + endpoint_r, p1[1] + endpoint_r), fill=BLACK)
         return
 
