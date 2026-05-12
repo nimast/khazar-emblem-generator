@@ -71,9 +71,13 @@ unplug and replug.
 there for about 2 minutes. If it's been there 5+ minutes, the program may
 have stopped. Power-cycle and it'll come back up.
 
-## More info
+## About
 
-Built by Nimrod (`nimast@gmail.com`). Source code lives at
+Built by **Nimrod Astarhan**.
+- nimrod@astarhan.com
+- nimrodastarhan.com
+
+Part of the *Light The Same Fire* art project. Source code lives at
 <https://github.com/nimast/khazar-emblem-generator>. If you're curious about
 how it's made, or you want to know what minute corresponds to what amulet,
 just ask.
